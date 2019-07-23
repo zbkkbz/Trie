@@ -73,4 +73,32 @@ public class Trie {
             size++;
         }
     }
+
+    //add的非递归
+    public void addR(String word){
+        add(root,word,0);
+    }
+
+    /** 
+    * @Description: add方法的递归写法
+     *              向以node为根的Trie中添加word[index...end), 递归算法
+    * @Param: [node, word, index]
+    * @return: void 
+    * @Author: ZBK 
+    * @Date: 2019/7/24 
+    */ 
+    private void add(Node node, String word, int index) {
+        if (index == word.length()){
+            if (!node.isWord){
+                node.isWord=true;
+                size++;
+            }
+            return;
+        }
+
+        char c = word.charAt(index);
+        if (node.next.get(c)==null)
+            node.next.put(c, new Node());
+        add(node.next.get(c),word,index+1);
+    }
 }
