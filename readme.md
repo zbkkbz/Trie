@@ -6,4 +6,4 @@ create new branch simply and quickly
 wj
 hello ,this is a test for git,it is a long time for me to not use git 
 wj is a pig
-dev22
+this is dev22
