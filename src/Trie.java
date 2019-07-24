@@ -88,6 +88,7 @@ public class Trie {
     * @Date: 2019/7/24 
     */ 
     private void add(Node node, String word, int index) {
+        //最小解,当index指向word最低端的时候
         if (index == word.length()){
             if (!node.isWord){
                 node.isWord=true;
@@ -101,4 +102,43 @@ public class Trie {
             node.next.put(c, new Node());
         add(node.next.get(c),word,index+1);
     }
+
+    //查询单词word是否再trie中
+    public boolean contains(String word){
+        Node cur = root;
+        for (int i=0;i<word.length();i++){
+            char c = word.charAt(i);
+            if (cur.next.get(c)==null){
+                return false;
+            }else {
+                cur = cur.next.get(c);
+            }
+        }
+        //最后要看是否为最终节点,如果isword为false,说明最终虽然有这个单词的字母,但是并不代表有这个单词
+        return cur.isWord;
+    }
+
+    //递归contains
+    public boolean containsR(Node node,String word,int index){
+
+        char c = word.charAt(index);
+        if (node.next.get(c)==null){
+            return false;
+        }else {
+            containsR(node.next.get(c),word,index+1);
+        }
+
+        if (index==word.length()){
+            if (node.next.get(c)==null){
+                return false
+            }else  if (node.next.get(c)!=null){
+                if (node.next.get(c).isWord!=false){
+                    return true;
+                }
+            }
+        }else {
+            return false;
+        }
+    }
+
 }
