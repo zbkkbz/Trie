@@ -44,7 +44,7 @@ public class Trie {
     }
 
     //获得Trie中的单词量
-    public int gitSize(){
+    public int getSize(){
         return size;
     }
 
@@ -79,16 +79,16 @@ public class Trie {
         add(root,word,0);
     }
 
-    /** 
+    /**
     * @Description: add方法的递归写法
      *              向以node为根的Trie中添加word[index...end), 递归算法
     * @Param: [node, word, index]
-    * @return: void 
-    * @Author: ZBK 
-    * @Date: 2019/7/24 
-    */ 
+    * @return: void
+    * @Author: ZBK
+    * @Date: 2019/7/24
+    */
     private void add(Node node, String word, int index) {
-        //最小解,当index指向word最低端的时候
+        //最小解,当index指向word最底端的时候
         if (index == word.length()){
             if (!node.isWord){
                 node.isWord=true;
@@ -118,27 +118,54 @@ public class Trie {
         return cur.isWord;
     }
 
+    public boolean containsR(String word){
+        return containsR(root,word, 0);
+    }
+
     //递归contains
-    public boolean containsR(Node node,String word,int index){
+    private boolean containsR(Node node,String word,int index){
+
+        if (index==word.length()) {
+            return node.isWord;
+        }
 
         char c = word.charAt(index);
-        if (node.next.get(c)==null){
+        if (node.next.get(c)==null)
             return false;
-        }else {
-            containsR(node.next.get(c),word,index+1);
-        }
+        return containsR(node.next.get(c),word,index+1);
 
-        if (index==word.length()){
-            if (node.next.get(c)==null){
-                return false
-            }else  if (node.next.get(c)!=null){
-                if (node.next.get(c).isWord!=false){
-                    return true;
-                }
-            }
-        }else {
-            return false;
-        }
     }
+
+    //查询trie中是否有单词以prefix为前缀
+    //当然一个单词也是本身的前缀
+    public boolean isPrefix(String prefix){
+        Node cur = root;
+        for (int i=0;i<prefix.length();i++){
+            char c = prefix.charAt(i);
+            if (cur.next.get(c)==null)
+                return false;
+            cur=cur.next.get(c);
+        }
+        //如果到了这一步说明上面的循环没有return false
+        //也就是说prefix都遍历完了,并且再trie中都有对应的值,那么就可以:
+        return true;
+    }
+
+    /// 查询是否在Trie中有单词以prefix为前缀
+    public boolean isPrefixR(String prefix){
+        return isPrefixR(root, prefix, 0);
+    }
+
+    // 查询在以Node为根的Trie中是否有单词以prefix[index...end)为前缀, 递归算法
+    public boolean isPrefixR(Node node,String prefix,int index){
+        if (index == prefix.length())
+            return true;
+
+        char c = prefix.charAt(index);
+        if (node.next.get(c)==null)
+            return false;
+        return isPrefixR(node.next.get(c),prefix,index+1);
+    }
+
 
 }
